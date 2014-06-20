@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "storage": {}
+    },
+    "packages": {
+      "storage": {
+        "git": "https://github.com/frozeman/meteor-storage.git",
+        "tag": "v0.1.5",
+        "commit": "bbc3e6df7591baccf169cb3bfe7445f5ff053fb4"
+      }
+    }
+  }
+}
