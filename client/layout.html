@@ -29,7 +29,7 @@
           <li>
             <a id="profitButton" class="button">
               Profit?
-              <span class="details"> -{{profitPrice}} yo, +$1 </span>
+              <span class="details"> -{{profitPrice}} yo, +${{profitMade}} </span>
             </a>
           </li>
         {{/if}}
@@ -42,7 +42,6 @@
   <div id="upgrades">
     <section>
       <ul>
-        <lh> Upgrades: </lh>
         {{#each upgrades}}
           <li class="{{#if active}}purchased{{/if}}">
             <span class="text">
@@ -62,7 +61,6 @@
   <div id="yoGen">
     <section>
       <ul>
-        <lh> Generate Yos </lh>
         {{#each yoGen}}
           <li>
             <span class="text">
@@ -80,7 +78,6 @@
   <ul id="cashGen">
     <section>
       <ul>
-        <lh> Generate Cash </lh>
         {{#each cashGen}}
           <li>
             <span class="text">

@@ -15,7 +15,7 @@ Meteor.startup ->
       owned: 0
       bought: 0
       name: "iPhone"
-      description: "Sends 1 yo per second"
+      description: "Sends 10 yo per second"
       cost: -> 400 + 200 * Math.pow(1.2, @bought)
       benefit: ['yo', 10]
     new ReactiveObject
@@ -71,13 +71,37 @@ Meteor.startup ->
       name: "Double Tap"
       description: "Send two Yos at once"
       cost: 10
-      benefit:
-        yoClick: 2
+      benefit: ["yo", 2]
+    new ReactiveObject
+      active: false
+      name: "Networking"
+      description: "Sell twice as many Yos per click"
+      cost: 50
+      benefit: ["sell", 2]
+    new ReactiveObject
+      active: false
+      name: "Special Gloves"
+      description: "Waste nothing. 5x Yos per click."
+      cost: 100
+      benefit: ["yo", 5]
+    new ReactiveObject
+      active: false
+      name: "Internet famous"
+      description: "People want your Yos. Sell 3x per click."
+      cost: 1000
+      benefit: ["sell", 3]
+
   ]
 
   yoMultiplier: ->
-    upgrades = _.select(Game.upgrades, (o)-> o.active)
-    _.reduce(upgrades, ((total, n) -> total * n.benefit.yoClick) , 1)
+    upgrades = _.select Game.upgrades, (o)->
+      o.active && o.benefit[0] == "yo"
+    _.reduce(upgrades, ((total, n) -> total * n.benefit[1]) , 1)
+
+  sellMultiplier: ->
+    upgrades = _.select Game.upgrades, (o)->
+      o.active && o.benefit[0] == "sell"
+    _.reduce(upgrades, ((total, n) -> total * n.benefit[1]) , 1)
 
   init: ->
     console.log "Game init"
@@ -129,7 +153,8 @@ Meteor.startup ->
 Template.stats.helpers
   yoCount: -> Game.yos
   yoMultiplier: -> Game.yoMultiplier()
-  profitPrice: -> Game.profitPrice
+  profitPrice: -> Game.profitPrice * Game.sellMultiplier()
+  profitMade: -> Game.sellMultiplier()
   cash: -> Game.cash
   showCash: -> Game.showCash
   showProfitButton: -> Game.showProfitButton
@@ -141,10 +166,10 @@ Template.stats.events
     if Game.yos >= Game.profitPrice
       Game.showProfitButton = true
   'click #profitButton': (e) ->
-    if Game.yos >= Game.profitPrice
-      Game.yos -= Game.profitPrice
-      Game.cash += 1
-      Game.showCash = true
+    yosToSell = Math.min(Game.yos, Game.profitPrice * Game.sellMultiplier())
+    Game.yos -= yosToSell
+    Game.cash += (yosToSell / (Game.profitPrice * Game.sellMultiplier())) * Game.sellMultiplier()
+    Game.showCash = true
 
 Template.actions.events
   'click #buyPhone': (e) ->
@@ -186,6 +211,18 @@ Template.actions.helpers
 
   showPhones: -> Game.showPhones
   showHipsters: -> Game.showHipsters
-  upgrades: -> Game.upgrades
-  yoGen: -> Game.yoGen
-  cashGen: -> Game.cashGen
+  upgrades: ->
+    _.filter Game.upgrades, (u, i) ->
+      if i == 0
+        return true
+      u.active || (u.cost / 2 < Game.cash)
+  yoGen: ->
+    _.filter Game.yoGen, (u, i) ->
+      if i == 0
+        return true
+      Game.yoGen[i-1].owned > 0
+  cashGen: ->
+    _.filter Game.cashGen, (u, i) ->
+      if i == 0
+        return true
+      Game.yoGen[i-1].owned > 0

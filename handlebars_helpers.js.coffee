@@ -11,3 +11,9 @@ Handlebars.registerHelper 'humanize', (number) ->
   base = (integer / Math.pow(10, scale - (scale%3)))
   roundedBase = Math.round(base*100)/100
   roundedBase + units[(scale-scale%3)/3]
+
+Handlebars.registerHelper 'decimal', (number) ->
+  Math.floor(number)
+
+Handlebars.registerHelper 'afford', (money) ->
+  money/2 < Game.cash
