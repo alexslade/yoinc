@@ -2,56 +2,75 @@ Meteor.startup ->
   @Game.init()
 
 @Game = new ReactiveObject
-  profitPrice: 1
-  phonePrice: 1
-  hipsterPrice: 100
+  profitPrice: 10
 
   yos: 0
   cash: 0
-  showCash: true
-  showProfitButton: true
-  phones: 0
-  showPhones: true
-  showBuyPhone: true
-  hipsters: 0
-  showHipsters: true
-  showBuyHipster: true
-
+  showCash: false
+  showProfitButton: false
   baseYo: 1
 
   yoGen: [
     new ReactiveObject
       owned: 0
-      name: "Phone"
-      cost: -> 1 * @owned * @owned
-      benefit: ['yo', 1]
+      bought: 0
+      name: "iPhone"
+      description: "Sends 1 yo per second"
+      cost: -> 400 + 200 * Math.pow(1.2, @bought)
+      benefit: ['yo', 10]
     new ReactiveObject
       owned: 0
+      bought: 0
       name: "Hipster"
-      cost: -> 100 * @owned * @owned
-      benefit: ['Phone', 1]
+      description: "Buys 1 iPhone every second"
+      cost: -> 8000 + 1000 * Math.pow(1.5, @bought)
+      benefit: ['iPhone', 1]
     new ReactiveObject
       owned: 0
+      bought: 0
       name: "TechHub"
-      cost: -> 100 * @owned * @owned
+      description: "Creates 1 Hipster every second"
+      cost: -> 2500000 + 100 * @bought * @bought
       benefit: ['Hipster', 1]
     new ReactiveObject
       owned: 0
+      bought: 0
       name: "VC"
-      cost: -> 100 * @owned * @owned
+      description: "Forms 1 TechHub every second"
+      cost: -> 80000000 + 100 * @bought * @bought
       benefit: ['TechHub', 1]
     new ReactiveObject
       owned: 0
+      bought: 0
       name: "HedgeFund"
-      cost: -> 100 * @owned * @owned
+      description: "Spawns 1 VC every second"
+      cost: -> 43000000000 + 100 * @bought * @bought
       benefit: ['VC', 1]
+  ]
+
+  cashGen: [
+    new ReactiveObject
+      owned: 0
+      bought: 0
+      name: "Blog"
+      description: "Converts yos into profit"
+      cost: -> 200 + 200 * Math.pow(1.2, @bought)
+      benefit: ['cash', 5]
+    new ReactiveObject
+      owned: 0
+      bought: 0
+      name: "Growth hacker"
+      description: "Sets up a new Blog every second"
+      cost: -> 3500 + 2000 * Math.pow(1.5, @bought)
+      benefit: ['Blog', 1]
   ]
 
   upgrades: [
     new ReactiveObject
       active: false
       name: "Double Tap"
-      cost: 200
+      description: "Send two Yos at once"
+      cost: 10
       benefit:
         yoClick: 2
   ]
@@ -67,7 +86,7 @@ Meteor.startup ->
 
   _startGameLoop: ->
     boundUpdate = (=> @_update())
-    setInterval(boundUpdate, 1000/60)
+    setInterval(boundUpdate, 1000/3)
 
   _setupFPSMeter: ->
     @meter = new FPSMeter
@@ -91,6 +110,15 @@ Meteor.startup ->
         gen2 = _.find(Game.yoGen, ((o) -> o.name == gen.benefit[0]))
         gen2.owned += delta * gen.benefit[1] * gen.owned
 
+    for gen in Game.cashGen
+      if gen.benefit[0] == 'cash'
+        yosToSell = Math.min(delta * gen.owned * gen.benefit[1], Game.yos)
+        Game.yos -= yosToSell
+        Game.cash += yosToSell / Game.profitPrice
+      else
+        gen2 = _.find(Game.cashGen, ((o) -> o.name == gen.benefit[0]))
+        gen2.owned += delta * gen.benefit[1] * gen.owned
+
     # yoGenerators = _.filter(Game.yoGen, ((o) -> o.benefit[0] == 'yo'))
     # yos = _.reduce(yoGenerators, ((total, o) -> o.owned * o.benefit[1]), 0)
 
@@ -100,9 +128,13 @@ Meteor.startup ->
 
 Template.stats.helpers
   yoCount: -> Game.yos
+  yoMultiplier: -> Game.yoMultiplier()
+  profitPrice: -> Game.profitPrice
   cash: -> Game.cash
   showCash: -> Game.showCash
   showProfitButton: -> Game.showProfitButton
+
+
 Template.stats.events
   'click #yoButton': (e) ->
     Game.yos += Game.yoMultiplier()
@@ -126,13 +158,22 @@ Template.actions.events
       Game.cash -= Game.hipsterPrice
       Game.showHipsters = true
 
-  'click #upgrades button': (e) ->
+  'click #upgrades .button': (e) ->
     if Game.cash >= this.cost
       Game.cash -= this.cost
       this.active = true
 
-  'click #yoGen button': (e) ->
-    this.owned += 1
+  'click #yoGen .button': (e) ->
+    if Game.cash >= this.cost()
+      Game.cash -= this.cost()
+      this.owned += 1
+      this.bought += 1
+
+  'click #cashGen .button': (e) ->
+    if Game.cash >= this.cost()
+      Game.cash -= this.cost()
+      this.owned += 1
+      this.bought += 1
 
 
 
@@ -147,3 +188,4 @@ Template.actions.helpers
   showHipsters: -> Game.showHipsters
   upgrades: -> Game.upgrades
   yoGen: -> Game.yoGen
+  cashGen: -> Game.cashGen

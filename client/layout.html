@@ -22,14 +22,14 @@
         <li>
           <a id="yoButton" class="button">
             Yo!
-            <span class="details"> +1 yo </span>
+            <span class="details"> +{{yoMultiplier}} yo </span>
           </a>
         </li>
         {{#if showProfitButton}}
           <li>
             <a id="profitButton" class="button">
               Profit?
-              <span class="details"> -1 yo, +$1 </span>
+              <span class="details"> -{{profitPrice}} yo, +$1 </span>
             </a>
           </li>
         {{/if}}
@@ -39,42 +39,61 @@
 </template>
 
 <template name="actions">
+  <div id="upgrades">
+    <section>
+      <ul>
+        <lh> Upgrades: </lh>
+        {{#each upgrades}}
+          <li class="{{#if active}}purchased{{/if}}">
+            <span class="text">
+              {{name}}<span class="details">({{description}})</span>
+            </span>
+            {{#if active}}
+              <a class="button purchased"> ✔ </a>
+            {{else}}
+              <a class="button"> ${{cost}} </a>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  </div>
+
   <div id="yoGen">
     <section>
       <ul>
         <lh> Generate Yos </lh>
         {{#each yoGen}}
           <li>
-            {{humanize owned}} - {{name}}<button>Buy</button>
+            <span class="text">
+              {{name}}
+              <span class="owned">{{humanize owned}} owned</span>
+              <span class="details">({{description}})</span>
+            </span>
+            <a class="button">${{humanize cost}}</a>
           </li>
         {{/each}}
       </ul>
     </section>
   </div>
-  <!-- <ul id="yos">
-    <lh> Yos </lh>
-    {{#if showBuyPhone}}
-      <li>
-        {{#if showPhones}} {{decimal phones}} {{/if}}
-          - Phone - $1 <input id="buyPhone" type="button" value="Buy" />
-      </li>
-    {{/if}}
-    {{#if showBuyHipster}}
-      <li>
-        {{#if showHipsters}} {{decimal hipsters}} {{/if}}
-         - Hipster (+1 phone every second) - $1 <input id="buyHipster" type="button" value="Buy" />
-      </li>
-    {{/if}}
-  </ul> -->
 
-  <ul id="cash">
-  <lh> Cash </lh>
+  <ul id="cashGen">
+    <section>
+      <ul>
+        <lh> Generate Cash </lh>
+        {{#each cashGen}}
+          <li>
+            <span class="text">
+              {{name}}
+              <span class="owned">{{humanize owned}} owned</span>
+              <span class="details">({{description}})</span>
+            </span>
+            <a class="button">${{humanize cost}}</a>
+          </li>
+        {{/each}}
+      </ul>
+    </section>
   </ul>
 
-  <ul id="upgrades">
-    <lh> Upgrades: </lh>
-    {{#each upgrades}}
-      <li class="{{#if active}}purchased{{/if}}">${{cost}} - {{name}} <button disabled="{{#if active}}disabled{{/if}}">{{#if active}}Purchased{{else}}Buy{{/if}}</button></li>
-    {{/each}}
-  </ul>
+
 </template>
