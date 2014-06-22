@@ -1,0 +1,60 @@
+@import "packages/bourbon/bourbon"
+@import "packages/neat/neat"
+
+section
+  +outer-container
+  padding: 5px 10px 10px
+
+ul
+  list-style: none
+  padding-left: 0px
+  margin: 0px
+
+.button
+  width: 100%
+  padding: 10px 0px
+  margin: 0px auto
+  display: block
+  background: darken(#BE5EFF, 10%)
+  border: none
+  text-align: center
+  font-size: 0.8em
+  .details
+    display: block
+    font-size: 12px
+    font-style: italic
+    opacity: 0.6
+
+body
+  font-family: "Gotham HTF"
+  font-weight: 700
+  color: #ffffff
+  font-size: 24px
+  -webkit-font-smoothing: antialiased
+  background-color: #232238
+
+#app-wrapper
+  background: #BE5EFF
+  width: 320px
+  margin: 50px auto
+
+#header
+  .totals
+    +clearfix
+  .yosTotal
+    +span-columns(6)
+  .cashTotal
+    +span-columns(6)
+    +omega
+    text-align: right;
+
+  .base-actions
+    clear: both
+    margin-top: 10px
+    li
+      +span-columns(6)
+
+
+#yoGen
+  background: #7389FF
+

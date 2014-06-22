@@ -8,3 +8,7 @@ autopublish
 insecure
 storage
 coffeescript
+reactive-extra
+scss
+bourbon
+neat

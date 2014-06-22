@@ -1,5 +1,9 @@
 {
   "packages": {
-    "storage": {}
+    "storage": {},
+    "reactive-extra": {},
+    "scss": {},
+    "bourbon": {},
+    "neat": {}
   }
 }

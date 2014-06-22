@@ -1,0 +1,80 @@
+<head>
+  <title>yoyo</title>
+</head>
+
+<body>
+  <div id="app-wrapper">
+    {{> stats}}
+    {{> actions}}
+  </div>
+</body>
+
+<template name="stats">
+  <div id="header">
+    <section>
+      <ul class="totals">
+        <span class="yosTotal"> {{humanize yoCount}} Yos </span>
+        {{#if showCash}}
+          <span class="cashTotal"> ${{humanize cash}} </span>
+        {{/if}}
+      </ul>
+      <ul class="base-actions">
+        <li>
+          <a id="yoButton" class="button">
+            Yo!
+            <span class="details"> +1 yo </span>
+          </a>
+        </li>
+        {{#if showProfitButton}}
+          <li>
+            <a id="profitButton" class="button">
+              Profit?
+              <span class="details"> -1 yo, +$1 </span>
+            </a>
+          </li>
+        {{/if}}
+      </ul>
+    </section>
+  </div>
+</template>
+
+<template name="actions">
+  <div id="yoGen">
+    <section>
+      <ul>
+        <lh> Generate Yos </lh>
+        {{#each yoGen}}
+          <li>
+            {{humanize owned}} - {{name}}<button>Buy</button>
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  </div>
+  <!-- <ul id="yos">
+    <lh> Yos </lh>
+    {{#if showBuyPhone}}
+      <li>
+        {{#if showPhones}} {{decimal phones}} {{/if}}
+          - Phone - $1 <input id="buyPhone" type="button" value="Buy" />
+      </li>
+    {{/if}}
+    {{#if showBuyHipster}}
+      <li>
+        {{#if showHipsters}} {{decimal hipsters}} {{/if}}
+         - Hipster (+1 phone every second) - $1 <input id="buyHipster" type="button" value="Buy" />
+      </li>
+    {{/if}}
+  </ul> -->
+
+  <ul id="cash">
+  <lh> Cash </lh>
+  </ul>
+
+  <ul id="upgrades">
+    <lh> Upgrades: </lh>
+    {{#each upgrades}}
+      <li class="{{#if active}}purchased{{/if}}">${{cost}} - {{name}} <button disabled="{{#if active}}disabled{{/if}}">{{#if active}}Purchased{{else}}Buy{{/if}}</button></li>
+    {{/each}}
+  </ul>
+</template>

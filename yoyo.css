@@ -1,1 +1,5 @@
 /* CSS declarations go here */
+#actions input {
+  padding: 1em 2em;
+  button-style: none;
+}
