@@ -39,58 +39,60 @@
 </template>
 
 <template name="actions">
-  <div id="upgrades">
-    <section>
-      <ul>
-        {{#each upgrades}}
-          <li class="{{#if active}}purchased{{/if}}">
-            <span class="text">
-              {{name}}<span class="details">({{description}})</span>
-            </span>
-            {{#if active}}
-              <a class="button purchased"> ✔ </a>
-            {{else}}
-              <a class="button"> ${{cost}} </a>
-            {{/if}}
-          </li>
-        {{/each}}
-      </ul>
-    </section>
-  </div>
+  {{#if showUpgrades}}
+    <div id="upgrades">
+      <section>
+        <ul>
+          {{#each upgrades}}
+            <li class="{{#if active}}purchased{{/if}}">
+              <span class="text">
+                {{name}}<span class="details">({{description}})</span>
+              </span>
+              {{#if active}}
+                <a class="button purchased"> ✔ </a>
+              {{else}}
+                <a class="button"> ${{cost}} </a>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
 
-  <div id="yoGen">
-    <section>
-      <ul>
-        {{#each yoGen}}
-          <li>
-            <span class="text">
-              {{name}}
-              <span class="owned">{{humanize owned}} owned</span>
-              <span class="details">({{description}})</span>
-            </span>
-            <a class="button">${{humanize cost}}</a>
-          </li>
-        {{/each}}
-      </ul>
-    </section>
-  </div>
+    <div id="yoGen">
+      <section>
+        <ul>
+          {{#each yoGen}}
+            <li>
+              <span class="text">
+                {{name}}
+                <span class="owned">{{humanize owned}} owned</span>
+                <span class="details">({{description}})</span>
+              </span>
+              <a class="button">${{humanize cost}}</a>
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
 
-  <ul id="cashGen">
-    <section>
-      <ul>
-        {{#each cashGen}}
-          <li>
-            <span class="text">
-              {{name}}
-              <span class="owned">{{humanize owned}} owned</span>
-              <span class="details">({{description}})</span>
-            </span>
-            <a class="button">${{humanize cost}}</a>
-          </li>
-        {{/each}}
-      </ul>
-    </section>
-  </ul>
+    <ul id="cashGen">
+      <section>
+        <ul>
+          {{#each cashGen}}
+            <li>
+              <span class="text">
+                {{name}}
+                <span class="owned">{{humanize owned}} owned</span>
+                <span class="details">({{description}})</span>
+              </span>
+              <a class="button">${{humanize cost}}</a>
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+    </ul>
 
+  {{/if}}
 
 </template>
