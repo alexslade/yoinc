@@ -127,7 +127,7 @@
       name: "Botnet"
       description: "You'll never get seeded without it. 10x yos."
       cost: 5000
-      benefit: ["yos", 10]
+      benefit: ["yo", 10]
   ]
 
   yoMultiplier: ->
