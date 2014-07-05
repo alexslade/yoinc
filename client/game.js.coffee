@@ -1,3 +1,12 @@
+class @Asset extends ReactiveObject
+  owned: 0
+  bought: 0
+  inflationRate: 1.2
+  baseCost: 1
+  cost: -> @baseCost * Math.pow(@inflationRate, @bought)
+  init: ->
+    @super()
+
 @Game = new ReactiveObject
   test: false #true # Test mode
   profitPrice: 5
@@ -8,80 +17,71 @@
   showUpgrades: false
   showProfitButton: false
   baseYo: 1
+  upgradeInflationRate: 1.2
 
   yoGen: [
-    new ReactiveObject
+    new Asset
       owned: 0
-      bought: 0
+      baseCost: 600
       name: "iPhone"
       description: "Sends 10 yo per second"
-      cost: -> 400 + 200 * Math.pow(1.2, @bought)
       benefit: ['yo', 10]
-    new ReactiveObject
+    new Asset
       owned: 0
-      bought: 0
+      baseCost: 3000
       name: "Hipster"
       description: "Buys 1 iPhone every second"
-      cost: -> 2000 + 1000 * Math.pow(1.5, @bought)
       benefit: ['iPhone', 1]
-    new ReactiveObject
+    new Asset
       owned: 0
-      bought: 0
+      baseCost: 250000
       name: "TechHub"
       description: "Creates 1 Hipster every second"
-      cost: -> 250000 + 100 * @bought * @bought
       benefit: ['Hipster', 1]
-    new ReactiveObject
+    new Asset
       owned: 0
-      bought: 0
+      baseCost: 8000000
       name: "VC"
       description: "Forms 1 TechHub every second"
-      cost: -> 8000000 + 100 * @bought * @bought
       benefit: ['TechHub', 1]
-    new ReactiveObject
+    new Asset
       owned: 0
-      bought: 0
+      baseCost: 430000000
       name: "HedgeFund"
       description: "Spawns 1 VC every second"
-      cost: -> 430000000 + 100 * @bought * @bought
       benefit: ['VC', 1]
   ]
 
   cashGen: [
-    new ReactiveObject
+    new Asset
+      baseCost: 400
       owned: 0
-      bought: 0
       name: "Blog"
       description: "Converts yos into profit"
-      cost: -> 400 + 400 * Math.pow(1.2, @bought)
       benefit: ['cash', 5]
-    new ReactiveObject
+    new Asset
+      baseCost: 3500
       owned: 0
-      bought: 0
       name: "Growth hacker"
       description: "Sets up a new Blog every second"
-      cost: -> 3500 + 2000 * Math.pow(1.2, @bought)
       benefit: ['Blog', 1]
-    new ReactiveObject
+    new Asset
+      baseCost: 40000
       owned: 0
-      bought: 0
       name: "Startup"
       description: "Hires 1 growth hacker every second"
-      cost: -> 40000 + 2000 * Math.pow(1.2, @bought)
       benefit: ['Growth hacker', 1]
-    new ReactiveObject
+    new Asset
+      baseCost: 500000
       owned: 0
-      bought: 0
       name: "Entrepreneur"
       description: "Founds a startup each second"
-      cost: -> 500000 + 2000 * Math.pow(1.5, @bought)
       benefit: ['Startup', 1]
-    new ReactiveObject
+    new Asset
+      baseCost: 6000000
       owned: 0
-      bought: 0
       name: "YCombinator"
       description: "Spawns an entrepreneur each second"
-      cost: -> 6000000 + 2000 * Math.pow(1.5, @bought)
       benefit: ['Entrepreneur', 1]
   ]
 
