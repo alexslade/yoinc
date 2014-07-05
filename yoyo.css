@@ -3,3 +3,16 @@
   padding: 1em 2em;
   button-style: none;
 }
+
+.divButton {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user:select: none;
+}
+
+.divButton:hover {
+  cursor:pointer;
+}
