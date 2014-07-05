@@ -31,4 +31,4 @@ Template.actions.helpers
     _.filter Game.cashGen, (u, i) ->
       if i == 0
         return true
-      Game.yoGen[i-1].owned > 0
+      Game.cashGen[i-1].owned > 0
